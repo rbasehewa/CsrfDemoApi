@@ -1,0 +1,52 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+out/
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# VS Code
+.vscode/
+
+# Dotnet publish / temp
+publish/
+*.dotCover
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# User secrets
+secrets.json
+
+# Cookies, local test data (do not commit)
+cookies.txt
+
+# JetBrains Rider
+.idea/
+
+# OneDrive/Temp lock files
+~$*
+
+# Optional: ignore user-specific launchSettings (if used)
+Properties/launchSettings.json
+
+# If you have any large files or local DBs
+*.db
+*.sqlite
